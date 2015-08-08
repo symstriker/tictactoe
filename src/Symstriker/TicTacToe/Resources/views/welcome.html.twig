@@ -1,0 +1,40 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+<div class="game-box">
+    <h4>Enter your name and sign:</h4>
+    <div id="error" style="display: none; color: red;">Define player name please!</div>
+    <div>
+        <input id="player" type="text" maxlength="20" />
+    </div>
+    <div>
+        <input class="sign" checked type="radio" name="sign" value="1"/> X
+        <input class="sign" type="radio" name="sign" value="0"/> 0
+    </div>
+    <div class="start-btn">
+        <button class="btn btn-primary" id="play">Play</button>
+    </div>
+</div>
+{% endblock %}
+{% block cssstyles %}
+    <style>
+        .start-btn {
+            margin: 20px;
+        }
+    </style>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(function(){
+            $('#play').on('click', function () {
+                var $player = $('#player').val();
+                var $sign = $('.sign:checked').val();
+                if (!$player) {
+                    $('#error').show();
+                    return 0;
+                }
+                window.location = '/start/' + $player + '/' + $sign;
+            });
+        });
+    </script>
+{% endblock %}

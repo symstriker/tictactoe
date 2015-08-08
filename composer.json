@@ -1,0 +1,31 @@
+{
+    "name": "symstriker/tictactoe",
+    "description": "Tic Tac Toe game",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "type": "application",
+    "authors": [
+        {
+            "name": "Yevhen Straihorodskyi",
+            "email": "indestructible86@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },
+    "autoload-dev": {
+        "psr-0": { "": "test/" }
+    },
+    "require": {
+        "php": ">=5.4.1",
+        "silex/silex": "~1.3",
+
+        "twig/twig": "^1.18",
+        "symfony/twig-bridge": "^2.7"
+
+    },
+    "require-dev": {
+        "monolog/monolog": "^1.15",
+        "phpunit/phpunit": "4.3.0"
+    }
+}

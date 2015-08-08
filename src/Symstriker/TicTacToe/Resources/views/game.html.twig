@@ -1,0 +1,67 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Tic Tac Toe{% endblock %}
+
+{% block content %}
+    <div class="game-box">
+        <div class="row">
+            <div class="span2"><a href="/start/{{ player1.name }}/{{ player1.gameSign }}" class="btn btn-primary">New game</a></div>
+            <div class="span2"><a href="/start/{{ player1.name }}/{{ player2.gameSign }}" class="btn btn-primary">Switch signs</a></div>
+        </div>
+        <div class="row names">
+            <div class="span2">{{ player1.name }}</div>
+            <div class="span2">{{ player2.name }}</div>
+        </div>
+        <div class="row">
+            <div class="center-block">
+                <table class="table-collapse">
+                    {% for row in 0..2 %}
+                        <tr>
+                            {% for col in 0..2 %}
+                                <td class="{% if col != 2 %}table-right-border {% endif %}{% if row != 2 %}table-bottom-border{% endif %}">
+                                    <div id="row{{ row }}col{{ col }}" class="game-cell">{% if board[row][col] is defined %}{% if board[row][col] == 1 %}X{% else %}O{% endif %}{% endif %}</div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block cssstyles %}
+
+{% endblock %}
+{% block javascripts %}
+    <script>
+        var game_over = false;
+        var opponentSign = '{% if player2.gameSign == 0 %}O{% else %}X{% endif %}';
+        $('.game-cell').on('click', function () {
+            if ($(this).html() || game_over) {
+                return 1;
+            }
+            $(this).html((opponentSign == 'O' ? 'X' : 'O'));
+            var row = $(this).attr('id').split('col')[0].replace('row', '');
+            var col = $(this).attr('id').split('col')[1];
+            $.ajax({'url' : 'move/' + row + '/' + col})
+                .done(function(response){
+                    $('#row' + response.row + 'col' + response.col).html(opponentSign);
+
+                    if (response.winner === {{ player2.gameSign }}) {
+                        game_over = true;
+                        alert('Opponent won! Press \'New game\' for the next round.');
+                    }
+
+                    if (response.winner === {{ player1.gameSign }}) {
+                        game_over = true;
+                        alert('You won! Press \'New game\' for the next round.');
+                    }
+
+                    if (response.row == -1 && response.col == -1) {
+                        game_over = true;
+                        alert('Game over! Press \'New game\' for the next round.');
+                    }
+                });
+        });
+    </script>
+{% endblock %}
